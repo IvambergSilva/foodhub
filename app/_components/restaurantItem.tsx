@@ -11,7 +11,7 @@ interface RestaurantItemsProps {
 
 export default function RestaurantItem({ restaurant }: RestaurantItemsProps) {
     return (
-        <Link href="">
+        <Link href={`/restaurants/${restaurant.id}`}>
             <div className="min-w-[266px] max-w-[266px]">
                 <div className="relative h-[136px] mb-3">
                     <Image src={restaurant.imageUrl} alt={restaurant.name} fill className="object-cover rounded-lg" />
