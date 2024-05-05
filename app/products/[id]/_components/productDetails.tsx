@@ -1,5 +1,6 @@
 'use client'
 
+import DeliveryInfo from "@/app/_components/deliveryInfo"
 import DiscountBadge from "@/app/_components/discountBadge"
 import ProductList from "@/app/_components/productList"
 import SectionTitle from "@/app/_components/sectionTitle"
@@ -96,28 +97,7 @@ export default function ProductDetails({ product, complementaryProducts }: Produ
                 </div>
             </section>
             <div className="my-6 px-5">
-                <Card>
-                    <div className="flex items-center justify-around p-2.5">
-                        <div className="flex flex-col items-center gap-0.5">
-                            <div className="flex items-center gap-2 text-muted-foreground">
-                                <span className="text-sm">Entrega</span>
-                                <BikeIcon size={16} />
-                            </div>
-                            <span className="text-sm font-semibold">
-                                {Number(product.restaurant.deliveryFee) > 0
-                                    ? formatCurrency(Number(product.restaurant.deliveryFee))
-                                    : 'Grátis'}
-                            </span>
-                        </div>
-                        <div className="flex flex-col items-center gap-0.5">
-                            <div className="flex items-center gap-2 text-muted-foreground">
-                                <span className="text-sm">Entrega</span>
-                                <ClockIcon size={16} />
-                            </div>
-                            <span className="text-sm font-semibold">{Number(product.restaurant.deliveryTimeMinutes)} min</span>
-                        </div>
-                    </div>
-                </Card>
+                <DeliveryInfo restaurant={product.restaurant} />
             </div>
             <section className="px-5">
                 <h3 className="text-base font-semibold mb-3">Sobre</h3>
