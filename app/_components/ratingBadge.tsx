@@ -7,11 +7,9 @@ interface RatingBadgeProps {
 
 export default function RatingBadge({ restaurant }: RatingBadgeProps) {
     return (
-        <div>
-            <div className="text-xs flex items-center justify-center rounded-full px-2.5 py-1 gap-1 bg-foreground">
-                <StarIcon size={12} className="fill-yellow-500 text-yellow-500" />
-                <span className="text-xs font-semibold text-white">{Number(restaurant.ratings)}</span>
-            </div>
+        <div className="flex items-center justify-center rounded-full px-2.5 py-1 min-w-14 w-14 gap-1">
+            <StarIcon size={12} className="fill-yellow-500 text-yellow-500" />
+            <span className="text-xs font-semibold">{Number(restaurant.ratings).toFixed(1)}</span>
         </div>
     )
 }
