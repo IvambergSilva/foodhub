@@ -5,9 +5,7 @@ import ProductList from "./_components/productList";
 import PromoBanner from "./_components/promoBanner";
 import { db } from "./_lib/prisma";
 import RestaurantList from "./_components/restaurantList";
-import { Button } from "./_components/ui/button";
-import Link from "next/link";
-import { ChevronRightIcon } from "lucide-react";
+import SectionTitle from "./_components/sectionTitle";
 
 export default async function Home() {
     const products = await db.product.findMany({
@@ -15,9 +13,6 @@ export default async function Home() {
             discountPercentage: {
                 gt: 0
             },
-            restaurant: {
-                deliveryFee: 0
-            }
         },
         take: 10,
         include: {
@@ -30,9 +25,11 @@ export default async function Home() {
             <div className="px-5 py-6">
                 <Header />
             </div>
+
             <div className="px-5">
                 <Search />
             </div>
+
             <div className="py-6">
                 <CategoryList />
             </div>
@@ -45,6 +42,10 @@ export default async function Home() {
             </div>
 
             <div className="py-6">
+                <SectionTitle
+                    title="Pedidos Recomendados"
+                    href={`/orders/recommends`}
+                />
                 <ProductList products={products} />
             </div>
 
@@ -56,21 +57,10 @@ export default async function Home() {
             </div>
 
             <div className="space-y-4 py-6">
-                <div className="flex items-center justify-between px-5">
-                    <h2 className="text-base font-semibold">Restaurante recomendados</h2>
-
-                    <Button
-                        variant="ghost"
-                        className="h-fit p-0 text-primary hover:bg-transparent"
-                        asChild
-                    >
-                        <Link href="">
-                            <span>Ver todos</span>
-                            <ChevronRightIcon size={16} />
-                        </Link>
-                    </Button>
-                </div>
-
+                <SectionTitle
+                    title="Restaurantes Recomendados"
+                    href="/restaurants/recommends"
+                />
                 <RestaurantList />
             </div>
         </>
