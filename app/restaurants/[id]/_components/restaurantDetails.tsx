@@ -2,7 +2,6 @@ import DeliveryInfo from "@/app/_components/deliveryInfo"
 import ProductList from "@/app/_components/productList"
 import RatingBadge from "@/app/_components/ratingBadge"
 import SectionTitle from "@/app/_components/sectionTitle"
-import { db } from "@/app/_lib/prisma"
 import { Prisma } from "@prisma/client"
 import Image from "next/image"
 
@@ -57,7 +56,10 @@ export default function RestaurantDetails({ restaurant }: RestaurantDetailsProps
             </div>
 
             <div>
-                <SectionTitle title="Mais pedidos" />
+                <SectionTitle
+                    title="Os mais pedidos"
+                    href={`/orders/popular/${restaurant.id}`}
+                />
 
                 <div className="flex gap-4 overflow-x-scroll [&::-webkit-scrollbar]:hidden">
                     <ProductList products={restaurant.products} />
@@ -67,7 +69,7 @@ export default function RestaurantDetails({ restaurant }: RestaurantDetailsProps
             {
                 restaurant.categories.map((category) => (
                     <div key={category.id}>
-                        <SectionTitle title={category.name} />
+                        <SectionTitle href={`/categories/${restaurant.id}/${category.id}`} title={category.name} />
 
                         <div className="flex gap-4 overflow-x-scroll [&::-webkit-scrollbar]:hidden">
                             <ProductList products={category.products} />
