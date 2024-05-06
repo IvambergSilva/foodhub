@@ -10,15 +10,15 @@ interface ProductItemProps {
             restaurant: {
                 select: {
                     name: true
-                }
-            }
-        }
+                },
+            },
+        },
     }>,
 }
 
 export default function ProductItem({ product }: ProductItemProps) {
     return (
-        <Link href={`/products/${product.id}`} className="w-[150px] min-w-[150px]">
+        <Link href={`/products/${product.id}`} className="min-w-[150px]">
             <div className="relative w-full h-[150px] mb-2">
                 <Image src={product.imageUrl} alt={product.name} fill className="object-cover rounded-lg" />
 
