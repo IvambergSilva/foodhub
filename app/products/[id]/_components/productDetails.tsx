@@ -5,14 +5,15 @@ import DeliveryInfo from "@/app/_components/deliveryInfo"
 import DiscountBadge from "@/app/_components/discountBadge"
 import ProductList from "@/app/_components/productList"
 import SectionTitle from "@/app/_components/sectionTitle"
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/app/_components/ui/alert-dialog"
 import { Button } from "@/app/_components/ui/button"
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/app/_components/ui/sheet"
 import { CartContext } from "@/app/_context/cart"
 import { calculateProductTotalPrice, formatCurrency } from "@/app/_helpers/price"
 import { Prisma } from "@prisma/client"
-import { ChevronLeftIcon, ChevronRightIcon, ClockIcon } from "lucide-react"
+import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react"
 import Image from "next/image"
-import { useContext, useEffect, useState } from "react"
+import { useContext, useState } from "react"
 
 interface ProductDetailsProps {
     product: Prisma.ProductGetPayload<{
@@ -41,9 +42,24 @@ export default function ProductDetails({ product, complementaryProducts }: Produ
     const { products, addProductToCart } = useContext(CartContext)
 
     const [isCartOpen, setIsCartOpen] = useState(false)
-    function handleAddProductToCart() {
-        addProductToCart(product, quantity)
+
+    const [isDialogOpen, setIsDialogOpen] = useState(false)
+
+    function addToCart({ emptyCart = false }: { emptyCart?: boolean }) {
+        addProductToCart({ product, quantity, emptyCart })
         setIsCartOpen(true)
+    }
+
+    function handleAddProductToCart() {
+        const hasDifferentRestaurantProduct = products.some(
+            (cartProduct) => cartProduct.restaurantId !== product.restaurantId
+        )
+
+        if (hasDifferentRestaurantProduct) return setIsDialogOpen(true)
+
+        addToCart({
+            emptyCart: false
+        })
     }
 
     const handleIncreaseQuantityClick = () => setQuantity(currentState => currentState + 1)
@@ -137,6 +153,24 @@ export default function ProductDetails({ product, complementaryProducts }: Produ
                     <Cart />
                 </SheetContent>
             </Sheet>
+
+            <AlertDialog
+                open={isDialogOpen}
+                onOpenChange={setIsDialogOpen}
+            >
+                <AlertDialogContent className="w-4/5 rounded-xl">
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>Somente itens de um restaurante por vez na sua sacola</AlertDialogTitle>
+                        <AlertDialogDescription>
+                            Deseja mesmo adicionar este produto? Isso limpara sua sacola atual
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                        <AlertDialogAction onClick={() => addToCart({ emptyCart: true })}>Esvaziar Sacola e Adiconar</AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
         </>
     )
 }

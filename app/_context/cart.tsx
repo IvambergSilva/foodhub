@@ -1,6 +1,6 @@
 'use client'
 
-import { Prisma, Product } from "@prisma/client"
+import { Prisma } from "@prisma/client"
 import { ReactNode, createContext, useMemo, useState } from "react";
 import { calculateProductTotalPrice } from "../_helpers/price";
 
@@ -21,7 +21,23 @@ interface ICartContext {
     subTotalPrice: number;
     totalPrice: number;
     totalDiscount: number;
-    addProductToCart: (product: Product, quantity: number) => void;
+    addProductToCart: ({
+        product,
+        quantity,
+        emptyCart
+    }: {
+        product: Prisma.ProductGetPayload<{
+            include: {
+                restaurant: {
+                    select: {
+                        deliveryFee: true;
+                    };
+                };
+            };
+        }>;
+        quantity: number;
+        emptyCart?: boolean;
+    }) => void;
     decreaseProductQuantity: (productId: string) => void;
     increaseQuantityClick: (productId: string) => void;
     removeProductFromCart: (productId: string) => void;
@@ -55,7 +71,24 @@ export default function CartProvider({ children }: { children: ReactNode }) {
 
     const totalDiscount = totalPrice - subTotalPrice;
 
-    function addProductToCart(product: Product, quantity: number) {
+    function addProductToCart(
+        { product, quantity, emptyCart }: {
+            product: Prisma.ProductGetPayload<{
+                include: {
+                    restaurant: {
+                        select: {
+                            deliveryFee: true
+                        }
+                    }
+                }
+            }>,
+            quantity: number,
+            emptyCart?: boolean
+        }
+    ) {
+
+        if (emptyCart) setProducts([])
+
         const isProductAlreadyOnCart = products.some(
             (cartProduct) => cartProduct.id === product.id
         )
@@ -73,6 +106,7 @@ export default function CartProvider({ children }: { children: ReactNode }) {
                 })
             )
         }
+
         setProducts((prev) => [...prev, { ...product, quantity: quantity }])
     }
 
@@ -124,6 +158,6 @@ export default function CartProvider({ children }: { children: ReactNode }) {
             totalPrice
         }}>
             {children}
-        </CartContext.Provider>
+        </CartContext.Provider >
     )
 }

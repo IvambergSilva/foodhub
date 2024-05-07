@@ -12,11 +12,14 @@ export default function Cart() {
     return (
         <div className="flex flex-col gap-5 py-5 justify-between h-full">
             {products.length > 0 ?
-                <>
-                    {products.map((product) => (
-                        <CartItem product={product} />
+                <div className="flex flex-col gap-4">
+                    {products.map((product, index) => (
+                        <>
+                            <CartItem product={product} />
+                            {index !== products.length - 1 && <Separator className="h-[2px]" />}
+                        </>
                     ))}
-                </>
+                </div>
                 : <span className="text-sm text-muted-foreground pb-3 block italic">Seu carrinho vazio, adicione alguns pedidos...</span>
             }
 
