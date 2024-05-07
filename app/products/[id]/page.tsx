@@ -43,12 +43,10 @@ export default async function ProductPage({ params: { id } }: ProductPageProps) 
                 product={product}
             />
 
-            <section>
-                <ProductDetails
-                    product={product}
-                    complementaryProducts={complementaryProducts}
-                />
-            </section>
+            <ProductDetails
+                product={product}
+                complementaryProducts={complementaryProducts}
+            />
         </div>
     )
 }
