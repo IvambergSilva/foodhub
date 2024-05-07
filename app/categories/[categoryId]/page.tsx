@@ -1,26 +1,20 @@
 import Header from "@/app/_components/header";
 import ProductItem from "@/app/_components/productItem";
-import ProductList from "@/app/_components/productList";
 import { db } from "@/app/_lib/prisma";
-import { Prisma } from "@prisma/client";
 import { notFound } from "next/navigation";
 
 interface CategoryPageProps {
     params: {
         categoryId: string;
-        restaurantId: string;
     }
 }
 
-export default async function CategoryPage({ params: { restaurantId, categoryId } }: CategoryPageProps) {
+export default async function CategoryPage({ params: { categoryId } }: CategoryPageProps) {
     const products = await db.product.findMany({
         where: {
             category: {
                 id: categoryId
             },
-            restaurant: {
-                id: restaurantId
-            }
         },
         include: {
             restaurant: {
@@ -29,9 +23,8 @@ export default async function CategoryPage({ params: { restaurantId, categoryId 
                 }
             },
         },
-        orderBy: {
-            discountPercentage: 'desc'
-        }
+        distinct: "name",
+        take: 6,
     })
 
     const category = await db.category.findUnique({
