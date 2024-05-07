@@ -26,16 +26,16 @@ export default async function ProductPage({ params: { id } }: ProductPageProps) 
         }
     })
 
+    if (!product) return notFound();
+
     const complementaryProducts = await db.product.findMany({
         where: {
-            restaurantId: product?.restaurantId
+            restaurantId: product.restaurantId
         },
         include: {
             restaurant: true,
         }
     })
-
-    if (!product) return notFound();
 
     return (
         <div>
@@ -44,7 +44,10 @@ export default async function ProductPage({ params: { id } }: ProductPageProps) 
             />
 
             <section>
-                <ProductDetails product={product} complementaryProducts={complementaryProducts} />
+                <ProductDetails
+                    product={product}
+                    complementaryProducts={complementaryProducts}
+                />
             </section>
         </div>
     )
