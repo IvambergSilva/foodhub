@@ -1,13 +1,15 @@
 'use client'
 
 import { Prisma } from "@prisma/client"
-import { ReactNode, createContext, useMemo, useState } from "react";
+import React, { ReactNode, createContext, useState } from "react";
 import { calculateProductTotalPrice } from "../_helpers/price";
 
 export interface CartProduct extends Prisma.ProductGetPayload<{
     include: {
         restaurant: {
             select: {
+                name: true,
+                imageUrl: true,
                 deliveryFee: true
             }
         }
@@ -21,6 +23,7 @@ interface ICartContext {
     subTotalPrice: number;
     totalPrice: number;
     totalDiscount: number;
+    totalQuantity: number;
     addProductToCart: ({
         product,
         quantity,
@@ -30,6 +33,8 @@ interface ICartContext {
             include: {
                 restaurant: {
                     select: {
+                        name: true;
+                        imageUrl: true;
                         deliveryFee: true;
                     };
                 };
@@ -48,6 +53,7 @@ export const CartContext = createContext<ICartContext>({
     subTotalPrice: 0,
     totalPrice: 0,
     totalDiscount: 0,
+    totalQuantity: 0,
     addProductToCart: () => { },
     decreaseProductQuantity: () => { },
     increaseQuantityClick: () => { },
@@ -55,21 +61,23 @@ export const CartContext = createContext<ICartContext>({
 })
 
 export default function CartProvider({ children }: { children: ReactNode }) {
-    const [products, setProducts] = useState<CartProduct[]>([])
+    const [products, setProducts] = useState<CartProduct[]>([]);
 
-    const subTotalPrice = useMemo(() => {
-        return products.reduce((acc, product) => {
-            return acc + Number(product.price) * product.quantity
-        }, 0)
-    }, [products]);
+    const subTotalPrice = products.reduce((acc, product) => {
+        return acc + Number(product.price) * product.quantity
+    }, 0);
 
-    const totalPrice = useMemo(() => {
-        return products.reduce((acc, product) => {
-            return acc + Number(calculateProductTotalPrice(product)) * product.quantity
-        }, 0)
-    }, [products]);
+    const totalDeliveryFee = Number(products?.[0]?.restaurant.deliveryFee);
 
-    const totalDiscount = totalPrice - subTotalPrice;
+    const totalPrice = subTotalPrice + totalDeliveryFee;
+
+    const totalDiscount = products.reduce((acc, product) => {
+        return acc + Number(calculateProductTotalPrice(product)) * product.quantity
+    }, 0) - subTotalPrice;
+
+    const totalQuantity = products.reduce((acc, product) => {
+        return acc + product.quantity
+    }, 0);
 
     function addProductToCart(
         { product, quantity, emptyCart }: {
@@ -77,6 +85,8 @@ export default function CartProvider({ children }: { children: ReactNode }) {
                 include: {
                     restaurant: {
                         select: {
+                            name: true,
+                            imageUrl: true,
                             deliveryFee: true
                         }
                     }
@@ -155,7 +165,8 @@ export default function CartProvider({ children }: { children: ReactNode }) {
             removeProductFromCart,
             subTotalPrice,
             totalDiscount,
-            totalPrice
+            totalPrice,
+            totalQuantity
         }}>
             {children}
         </CartContext.Provider >
