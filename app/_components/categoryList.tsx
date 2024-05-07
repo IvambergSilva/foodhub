@@ -11,6 +11,12 @@ export default async function CategoryList() {
     });
 
     return (
-        <CategoryItem categories={categories} />
+        <div
+            className="flex items-center gap-3 w-full overflow-x-scroll px-4 pb-2 [&::-webkit-scrollbar]:hidden"
+        >
+            {categories.map((category) => (
+                <CategoryItem category={category} />
+            ))}
+        </div>
     )
 }
