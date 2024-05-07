@@ -10,9 +10,11 @@ import { Button } from "@/app/_components/ui/button"
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/app/_components/ui/sheet"
 import { CartContext } from "@/app/_context/cart"
 import { calculateProductTotalPrice, formatCurrency } from "@/app/_helpers/price"
+import CartBanner from "@/app/restaurants/[id]/_components/cartBanner"
 import { Prisma } from "@prisma/client"
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react"
 import Image from "next/image"
+import Link from "next/link"
 import { useContext, useState } from "react"
 
 interface ProductDetailsProps {
@@ -39,11 +41,11 @@ interface ProductDetailsProps {
 export default function ProductDetails({ product, complementaryProducts }: ProductDetailsProps) {
     const [quantity, setQuantity] = useState(1)
 
-    const { products, addProductToCart } = useContext(CartContext)
-
-    const [isCartOpen, setIsCartOpen] = useState(false)
+    const { products, addProductToCart, totalQuantity } = useContext(CartContext)
 
     const [isDialogOpen, setIsDialogOpen] = useState(false)
+
+    const [isCartOpen, setIsCartOpen] = useState(false)
 
     function addToCart({ emptyCart = false }: { emptyCart?: boolean }) {
         addProductToCart({ product, quantity, emptyCart })
@@ -71,9 +73,12 @@ export default function ProductDetails({ product, complementaryProducts }: Produ
 
     return (
         <>
-            <div className="py-5 rounded-tl-3xl rounded-tr-3xl relative mt-[-1.5rem] z-1 bg-white">
+            <div className={`${totalQuantity > 0 && 'pb-32'} py-5 rounded-tl-3xl rounded-tr-3xl relative mt-[-1.5rem] z-1 bg-white`}>
                 <section className="px-5">
-                    <div className="flex items-center gap-1.5">
+                    <Link
+                        href={`/restaurants/${product.restaurantId}`}
+                        className="flex items-center gap-1.5 w-fit"
+                    >
                         <div className="relative w-6 h-6">
                             <Image
                                 src={product.restaurant.imageUrl}
@@ -83,7 +88,7 @@ export default function ProductDetails({ product, complementaryProducts }: Produ
                             />
                         </div>
                         <span className="text-sm text-muted-foreground">{product.restaurant.name}</span>
-                    </div>
+                    </Link>
 
                     <p className="font-semibold text-xl mb-3 mt-2">{product.name}</p>
 
@@ -145,8 +150,11 @@ export default function ProductDetails({ product, complementaryProducts }: Produ
                     </Button>
                 </div>
             </div>
+
+            {totalQuantity > 0 && (<CartBanner />)}
+
             <Sheet open={isCartOpen} onOpenChange={setIsCartOpen}>
-                <SheetContent className="w-[90vw]">
+                <SheetContent className="w-[80vw]">
                     <SheetHeader>
                         <SheetTitle className="text-left">Sacola</SheetTitle>
                     </SheetHeader>

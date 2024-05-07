@@ -1,9 +1,14 @@
+'use client'
+
 import DeliveryInfo from "@/app/_components/deliveryInfo"
 import ProductList from "@/app/_components/productList"
 import RatingBadge from "@/app/_components/ratingBadge"
 import SectionTitle from "@/app/_components/sectionTitle"
 import { Prisma } from "@prisma/client"
 import Image from "next/image"
+import CartBanner from "./cartBanner"
+import { useContext } from "react"
+import { CartContext } from "@/app/_context/cart"
 
 interface RestaurantDetailsProps {
     restaurant: Prisma.RestaurantGetPayload<{
@@ -30,8 +35,10 @@ interface RestaurantDetailsProps {
 }
 
 export default function RestaurantDetails({ restaurant }: RestaurantDetailsProps) {
+    const { totalQuantity } = useContext(CartContext)
+
     return (
-        <div className="py-5 rounded-tl-3xl rounded-tr-3xl relative mt-[-1.5rem] z-1 bg-white">
+        <div className={`${totalQuantity > 0 && 'pb-32'} py-5 rounded-tl-3xl rounded-tr-3xl relative mt-[-1.5rem] z-1 bg-white`}>
             <div className="flex items-center justify-between px-5 pb-3">
                 <div className="flex items-center gap-1.5">
                     <div className="relative h-[30px] w-[30px]">
@@ -77,6 +84,8 @@ export default function RestaurantDetails({ restaurant }: RestaurantDetailsProps
                     </div>
                 ))
             }
+
+            {totalQuantity > 0 && (<CartBanner />)}
         </div>
     )
 }
