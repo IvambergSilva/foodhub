@@ -69,7 +69,7 @@ export default function RestaurantDetails({ restaurant }: RestaurantDetailsProps
             {
                 restaurant.categories.map((category) => (
                     <div key={category.id}>
-                        <SectionTitle href={`/categories/${restaurant.id}/${category.id}`} title={category.name} />
+                        <SectionTitle href={`/categories/${category.id}/${restaurant.id}`} title={category.name} />
 
                         <div className="flex gap-4 overflow-x-scroll [&::-webkit-scrollbar]:hidden">
                             <ProductList products={category.products} />
