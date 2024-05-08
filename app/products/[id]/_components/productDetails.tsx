@@ -170,7 +170,7 @@ export default function ProductDetails({ product, complementaryProducts }: Produ
                     <AlertDialogHeader>
                         <AlertDialogTitle>Somente itens de um restaurante por vez na sua sacola</AlertDialogTitle>
                         <AlertDialogDescription>
-                            Deseja mesmo adicionar este produto? Isso limpara sua sacola atual
+                            Deseja mesmo adicionar este produto? Isso limpará sua sacola atual
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>

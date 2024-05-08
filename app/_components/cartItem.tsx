@@ -26,8 +26,8 @@ export default function CartItem({ product }: CartItemProps) {
                 <div className="flex flex-col justify-between h-[77px]">
                     <span className="text-xs">{product.name}</span>
 
-                    <div className="flex items-center">
-                        <span className="font-semibold text-sm w-24">{formatCurrency(Number(product.price) * product.quantity)}</span>
+                    <div className="flex items-center gap-3">
+                        <span className="font-semibold text-sm w-[70px]">{formatCurrency(Number(product.price) * product.quantity)}</span>
 
                         {product.discountPercentage > 0 && (
                             <span className="text-sm text-muted-foreground line-through"> {formatCurrency(Number(calculateProductTotalPrice(product)) * product.quantity)}</span>
