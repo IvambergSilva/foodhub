@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Poppins } from "next/font/google";
 import "./globals.css";
 import CartProvider from "./_context/cart";
 import AuthProvider from "./_providers/auth";
 
-const inter = Inter({ subsets: ["latin"] });
+const popins = Poppins({ weight: ["400", "500", "600", "700", "800"], subsets: ["latin"] });
 
 export const metadata: Metadata = {
     title: "FoodHub",
@@ -18,7 +18,7 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="pt-BR">
-            <body className={inter.className}>
+            <body className={popins.className}>
                 <AuthProvider>
                     <CartProvider>{children}</CartProvider>
                 </AuthProvider>
