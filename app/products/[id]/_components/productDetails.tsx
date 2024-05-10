@@ -22,6 +22,7 @@ interface ProductDetailsProps {
         include: {
             restaurant: {
                 select: {
+                    id: true,
                     name: true,
                     imageUrl: true,
                     deliveryFee: true,

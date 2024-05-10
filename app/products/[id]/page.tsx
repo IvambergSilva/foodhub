@@ -17,6 +17,7 @@ export default async function ProductPage({ params: { id } }: ProductPageProps) 
         include: {
             restaurant: {
                 select: {
+                    id: true,
                     name: true,
                     imageUrl: true,
                     deliveryFee: true,

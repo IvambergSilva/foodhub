@@ -8,9 +8,11 @@ export interface CartProduct extends Prisma.ProductGetPayload<{
     include: {
         restaurant: {
             select: {
+                id: true,
                 name: true,
                 imageUrl: true,
-                deliveryFee: true
+                deliveryFee: true,
+                deliveryTimeMinutes: true
             }
         }
     }
@@ -33,9 +35,11 @@ interface ICartContext {
             include: {
                 restaurant: {
                     select: {
+                        id: true
                         name: true;
                         imageUrl: true;
                         deliveryFee: true;
+                        deliveryTimeMinutes: true
                     };
                 };
             };
@@ -46,6 +50,7 @@ interface ICartContext {
     decreaseProductQuantity: (productId: string) => void;
     increaseQuantityClick: (productId: string) => void;
     removeProductFromCart: (productId: string) => void;
+    clearCart: () => void;
 }
 
 export const CartContext = createContext<ICartContext>({
@@ -57,7 +62,8 @@ export const CartContext = createContext<ICartContext>({
     addProductToCart: () => { },
     decreaseProductQuantity: () => { },
     increaseQuantityClick: () => { },
-    removeProductFromCart: () => { }
+    removeProductFromCart: () => { },
+    clearCart: () => { },
 })
 
 export default function CartProvider({ children }: { children: ReactNode }) {
@@ -79,15 +85,21 @@ export default function CartProvider({ children }: { children: ReactNode }) {
         return acc + product.quantity
     }, 0);
 
+    const clearCart = () => {
+        setProducts([])
+    }
+
     function addProductToCart(
         { product, quantity, emptyCart }: {
             product: Prisma.ProductGetPayload<{
                 include: {
                     restaurant: {
                         select: {
+                            id: true,
                             name: true,
                             imageUrl: true,
-                            deliveryFee: true
+                            deliveryFee: true,
+                            deliveryTimeMinutes: true
                         }
                     }
                 }
@@ -163,6 +175,7 @@ export default function CartProvider({ children }: { children: ReactNode }) {
             decreaseProductQuantity,
             increaseQuantityClick,
             removeProductFromCart,
+            clearCart,
             subTotalPrice,
             totalDiscount,
             totalPrice,

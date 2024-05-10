@@ -81,15 +81,24 @@ export default function Header() {
                                 <div className="flex flex-col gap-1">
                                     <Button
                                         className="rounded-full flex justify-start gap-3"
+                                        asChild
                                     >
-                                        <HomeIcon size={16} />
-                                        <span className="text-sm font-normal">Início</span>
+                                        <Link href="/">
+                                            <HomeIcon size={16} />
+                                            <span className="text-sm font-normal">Início</span>
+                                        </Link>
                                     </Button>
+
                                     <ButtonMenu text="Meus Pedidos">
-                                        <ScrollTextIcon size={16} />
+                                        <Link href={`/orders/my-orders`}>
+                                            <ScrollTextIcon size={16} />
+                                        </Link>
                                     </ButtonMenu>
+
                                     <ButtonMenu text="Restaurantes favoritos">
-                                        <Heart size={16} />
+                                        <Link href="">
+                                            <Heart size={16} />
+                                        </Link>
                                     </ButtonMenu>
                                 </div>
                             </>

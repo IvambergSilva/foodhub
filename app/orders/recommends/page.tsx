@@ -11,7 +11,7 @@ export default async function page() {
     })
 
     return (
-        <div className="px-5 w-full py-5">
+        <div className="p-5 w-full">
             <Header />
 
             <h2 className="text-lg font-semibold py-6">Pedidos Recomendados</h2>
